@@ -23,6 +23,7 @@ import com.sangcomz.fishbun.BaseActivity;
 import com.sangcomz.fishbun.R;
 import com.sangcomz.fishbun.adapter.view.PickerGridAdapter;
 import com.sangcomz.fishbun.bean.Album;
+import com.sangcomz.fishbun.bean.ImageData;
 import com.sangcomz.fishbun.define.Define;
 import com.sangcomz.fishbun.permission.PermissionCheck;
 import com.sangcomz.fishbun.util.RadioWithTextButton;
@@ -31,6 +32,7 @@ import com.sangcomz.fishbun.util.SquareFrameLayout;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PickerActivity extends BaseActivity {
@@ -70,7 +72,7 @@ public class PickerActivity extends BaseActivity {
         try {
             ArrayList<Uri> addImages = outState.getParcelableArrayList(define.SAVE_INSTANCE_NEW_IMAGES);
             String savedImage = outState.getString(define.SAVE_INSTANCE_SAVED_IMAGE);
-            setAdapter(fishton.pickerImages);
+            setAdapter(fishton.pickerImageList);
             if (addImages != null) {
                 pickerController.setAddImagePaths(addImages);
             }
@@ -252,8 +254,9 @@ public class PickerActivity extends BaseActivity {
     }
 
 
-    public void setAdapter(Uri[] result) {
-        fishton.pickerImages = result;
+    public void setAdapter(List<ImageData> result) {
+//        fishton.pickerImages = result;
+        fishton.pickerImageList = result;
         if (adapter == null) {
             adapter = new PickerGridAdapter(pickerController,
                     pickerController.getPathDir(album.bucketId));

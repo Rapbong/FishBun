@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.sangcomz.fishbun.Fishton;
 import com.sangcomz.fishbun.R;
+import com.sangcomz.fishbun.adapter.image.ImageAdapterData;
 import com.sangcomz.fishbun.util.TouchImageView;
 
 /**
@@ -29,7 +30,6 @@ public class DetailViewPagerAdapter extends PagerAdapter {
         fishton = Fishton.getInstance();
     }
 
-
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
@@ -38,12 +38,13 @@ public class DetailViewPagerAdapter extends PagerAdapter {
         container.addView(itemView);
 
         TouchImageView imageView = itemView.findViewById(R.id.img_detail_image);
+        ImageAdapterData data = new ImageAdapterData(imageView, images[position], 0);
 
         if (imageView != null
                 && images[position] != null)
             fishton
                     .imageAdapter
-                    .loadDetailImage(imageView, images[position]);
+                    .loadDetailImage(data);
 
         return itemView;
     }

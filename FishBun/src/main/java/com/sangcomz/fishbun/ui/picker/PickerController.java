@@ -8,13 +8,17 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.sangcomz.fishbun.bean.ImageData;
 import com.sangcomz.fishbun.permission.PermissionCheck;
 import com.sangcomz.fishbun.util.CameraUtil;
 import com.sangcomz.fishbun.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sangc on 2015-11-05.
@@ -80,7 +84,7 @@ public class PickerController {
         new DisplayImage(bucketId, exceptGif).execute();
     }
 
-    private class DisplayImage extends AsyncTask<Void, Void, Uri[]> {
+    private class DisplayImage extends AsyncTask<Void, Void, List<ImageData>> {
         private Long bucketId;
         Boolean exceptGif;
 
@@ -91,12 +95,12 @@ public class PickerController {
         }
 
         @Override
-        protected Uri[] doInBackground(Void... params) {
+        protected List<ImageData> doInBackground(Void... params) {
             return getAllMediaThumbnailsPath(bucketId, exceptGif);
         }
 
         @Override
-        protected void onPostExecute(Uri[] result) {
+        protected void onPostExecute(List<ImageData> result) {
             super.onPostExecute(result);
             pickerActivity.setAdapter(result);
         }
@@ -104,7 +108,7 @@ public class PickerController {
 
 
     @NonNull
-    private Uri[] getAllMediaThumbnailsPath(long id,
+    private List<ImageData> getAllMediaThumbnailsPath(long id,
                                             Boolean exceptGif) {
         String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
         String bucketId = String.valueOf(id);
@@ -119,6 +123,8 @@ public class PickerController {
             c = resolver.query(images, null, null, null, sort);
         }
         Uri[] imageUris = new Uri[c == null ? 0 : c.getCount()];
+        ArrayList<ImageData> imageDataList = new ArrayList<>();
+
         if (c != null) {
             try {
                 if (c.moveToFirst()) {
@@ -132,7 +138,10 @@ public class PickerController {
                             continue;
                         int imgId = c.getInt(c.getColumnIndex(MediaStore.MediaColumns._ID));
                         Uri path = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + imgId);
+                        int orien = c.getInt(c.getColumnIndex(MediaStore.Images.Media.ORIENTATION));
+                        Log.d("fishbun", "orien = "+ orien + " , name = " + c.getString(c.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
                         imageUris[++position] = path;
+                        imageDataList.add(new ImageData(path, orien));
                     } while (c.moveToNext());
                 }
                 c.close();
@@ -140,7 +149,7 @@ public class PickerController {
                 if (!c.isClosed()) c.close();
             }
         }
-        return imageUris;
+        return imageDataList;
     }
 
     private String setPathDir(String path, String fileName) {

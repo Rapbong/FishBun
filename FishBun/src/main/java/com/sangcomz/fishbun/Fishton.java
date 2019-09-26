@@ -6,8 +6,10 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
 import com.sangcomz.fishbun.adapter.image.ImageAdapter;
+import com.sangcomz.fishbun.bean.ImageData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by seokwon.jeong on 04/01/2018.
@@ -16,12 +18,13 @@ import java.util.ArrayList;
 public class Fishton {
     public ImageAdapter imageAdapter;
     public Uri[] pickerImages;
+    public List<ImageData> pickerImageList;
 
     //BaseParams
     public int maxCount;
     public int minCount;
     public boolean isExceptGif;
-    public ArrayList<Uri> selectedImages = new ArrayList<>();
+    public ArrayList<Uri> selectedImages;
 
 
     //CustomizationParams

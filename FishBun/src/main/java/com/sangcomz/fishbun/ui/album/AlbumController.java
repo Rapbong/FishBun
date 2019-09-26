@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.sangcomz.fishbun.bean.Album;
 import com.sangcomz.fishbun.permission.PermissionCheck;
@@ -65,7 +66,8 @@ class AlbumController {
                     MediaStore.Images.Media.DATA,
                     MediaStore.Images.Media._ID,
                     MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-                    MediaStore.Images.Media.BUCKET_ID};
+                    MediaStore.Images.Media.BUCKET_ID,
+                    MediaStore.Images.Media.ORIENTATION};
 
             Cursor c = resolver.query(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
@@ -79,8 +81,10 @@ class AlbumController {
                         .getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
                 int bucketColumnId = c
                         .getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
+                int bucketOrientation = c
+                        .getColumnIndex(MediaStore.Images.Media.ORIENTATION);
 
-                albumHashMap.put((long) 0, new Album(0, allViewTitle, null, 0));
+                albumHashMap.put((long) 0, new Album(0, allViewTitle, null, 0, 0));
 
                 RegexUtil regexUtil = new RegexUtil();
                 while (c.moveToNext()) {
@@ -91,10 +95,12 @@ class AlbumController {
                     if (album == null) {
                         int imgId = c.getInt(c.getColumnIndex(MediaStore.MediaColumns._ID));
                         Uri path = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + imgId);
+                        int oren = c.getInt(bucketOrientation);
+                        Log.d("fishbun", "oren = " + oren + " , name = " + c.getString(bucketColumn));
                         albumHashMap.put(bucketId,
                                 new Album(bucketId,
                                         c.getString(bucketColumn),
-                                        path.toString(), 1));
+                                        path.toString(), 1, c.getInt(bucketOrientation)));
                         if (albumHashMap.get((long) 0).thumbnailPath == null)
                             albumHashMap.get((long) 0).thumbnailPath = path.toString();
                     } else {

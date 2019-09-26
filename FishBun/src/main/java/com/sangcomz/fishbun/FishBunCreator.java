@@ -267,7 +267,7 @@ public final class FishBunCreator implements BaseProperty, CustomizationProperty
 
         if (fishton.isStartInAllView) {
             Intent i = new Intent(context, PickerActivity.class);
-            i.putExtra(Define.BUNDLE_NAME.ALBUM.name(), new Album(0, fishton.titleAlbumAllView, null, 0));
+            i.putExtra(Define.BUNDLE_NAME.ALBUM.name(), new Album(0, fishton.titleAlbumAllView, null, 0, 0));
             i.putExtra(Define.BUNDLE_NAME.POSITION.name(), 0);
             if (activity != null) activity.startActivityForResult(i, requestCode);
             else if (fragment != null) fragment.startActivityForResult(i, requestCode);

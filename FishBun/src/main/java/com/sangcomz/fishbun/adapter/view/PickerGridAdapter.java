@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 
 import com.sangcomz.fishbun.Fishton;
 import com.sangcomz.fishbun.R;
+import com.sangcomz.fishbun.adapter.image.ImageAdapterData;
+import com.sangcomz.fishbun.bean.ImageData;
 import com.sangcomz.fishbun.define.Define;
 import com.sangcomz.fishbun.ui.detail.DetailActivity;
 import com.sangcomz.fishbun.ui.picker.PickerActivity;
@@ -86,11 +88,15 @@ public class PickerGridAdapter
             vh.btnThumbCount.setTextColor(fishton.colorActionBarTitle);
             vh.btnThumbCount.setStrokeColor(fishton.colorSelectCircleStroke);
 
+            final ImageData imageData = fishton.pickerImageList.get(imagePos);
+
             initState(fishton.selectedImages.indexOf(image), vh);
             if (image != null
-                    && vh.imgThumbImage != null)
+                    && vh.imgThumbImage != null) {
+                ImageAdapterData data = new ImageAdapterData(vh.imgThumbImage, imageData.getUri(), imageData.getOrientation());
                 Fishton.getInstance().imageAdapter
-                        .loadImage(vh.imgThumbImage, image);
+                        .loadImage(data);
+            }
 
 
             vh.btnThumbCount.setOnClickListener(new View.OnClickListener() {

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.sangcomz.fishbun.Fishton;
 import com.sangcomz.fishbun.R;
+import com.sangcomz.fishbun.adapter.image.ImageAdapterData;
 import com.sangcomz.fishbun.bean.Album;
 import com.sangcomz.fishbun.define.Define;
 import com.sangcomz.fishbun.ui.picker.PickerActivity;
@@ -51,9 +52,11 @@ public class AlbumListAdapter
 
         Uri loadUrl = Uri.parse(albumList.get(position).thumbnailPath);
 
+        ImageAdapterData data = new ImageAdapterData(holder.imgAlbumThumb, loadUrl, albumList.get(position).orientation);
+
         if (holder.imgAlbumThumb != null && loadUrl != null)
             Fishton.getInstance().imageAdapter
-                    .loadImage(holder.imgAlbumThumb, loadUrl);
+                    .loadImage(data);
 
         holder.view.setTag(albumList.get(position));
         Album a = (Album) holder.view.getTag();
