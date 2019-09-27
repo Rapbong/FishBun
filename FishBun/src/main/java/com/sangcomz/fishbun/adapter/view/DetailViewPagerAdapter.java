@@ -1,5 +1,6 @@
 package com.sangcomz.fishbun.adapter.view;
 
+import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
@@ -11,10 +12,7 @@ import android.view.ViewGroup;
 import com.sangcomz.fishbun.Fishton;
 import com.sangcomz.fishbun.R;
 import com.sangcomz.fishbun.adapter.image.ImageAdapterData;
-import com.sangcomz.fishbun.bean.ImageData;
 import com.sangcomz.fishbun.util.TouchImageView;
-
-import java.util.List;
 
 /**
  * Created by sangcomz on 15/06/2017.
@@ -24,11 +22,11 @@ public class DetailViewPagerAdapter extends PagerAdapter {
 
     private Fishton fishton;
     private LayoutInflater inflater;
-    private List<ImageData> imageDataList;
+    private Uri[] images;
 
-    public DetailViewPagerAdapter(LayoutInflater inflater, List<ImageData> imageDataList) {
+    public DetailViewPagerAdapter(LayoutInflater inflater, Uri[] images) {
         this.inflater = inflater;
-        this.imageDataList = imageDataList;
+        this.images = images;
         fishton = Fishton.getInstance();
     }
 
@@ -40,20 +38,20 @@ public class DetailViewPagerAdapter extends PagerAdapter {
         container.addView(itemView);
 
         TouchImageView imageView = itemView.findViewById(R.id.img_detail_image);
+        ImageAdapterData data = new ImageAdapterData(imageView, images[position], 0);
 
-        if (imageDataList.get(position) != null) {
-            ImageAdapterData data = new ImageAdapterData(imageView, imageDataList.get(position).getUri(), imageDataList.get(position).getOrientation());
+        if (imageView != null
+                && images[position] != null)
             fishton
                     .imageAdapter
                     .loadDetailImage(data);
-        }
 
         return itemView;
     }
 
     @Override
     public int getCount() {
-        return imageDataList.size();
+        return images.length;
     }
 
     @Override

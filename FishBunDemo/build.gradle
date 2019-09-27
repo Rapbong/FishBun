@@ -1,6 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-android'
 
 buildscript {
     repositories {
@@ -8,6 +6,9 @@ buildscript {
         mavenCentral()
     }
 }
+
+
+
 
 android {
     compileSdkVersion gradle.compileSdk
@@ -65,8 +66,6 @@ dependencies {
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation "com.squareup.picasso:picasso:$rootProject.picasso_version"
     implementation "com.github.bumptech.glide:glide:$rootProject.glide_version"
-    compile "androidx.core:core-ktx:+"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 buildscript {
@@ -92,7 +91,4 @@ task printProps {
     doLast {
         println System.properties['system']
     }
-}
-repositories {
-    mavenCentral()
 }

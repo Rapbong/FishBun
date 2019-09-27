@@ -75,15 +75,15 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initAdapter() {
-        if (fishton.pickerImageList.isEmpty()) {
+        if (fishton.pickerImages == null) {
             Toast.makeText(this, R.string.msg_error, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        onCheckStateChange(fishton.pickerImageList.get(initPosition).getUri());
+        onCheckStateChange(fishton.pickerImages[initPosition]);
 
-        DetailViewPagerAdapter adapter = new DetailViewPagerAdapter(getLayoutInflater(), fishton.pickerImageList);
+        DetailViewPagerAdapter adapter = new DetailViewPagerAdapter(getLayoutInflater(), fishton.pickerImages);
         vpDetailPager.setAdapter(adapter);
         vpDetailPager.setCurrentItem(initPosition);
 
@@ -145,7 +145,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onPageSelected(int position) {
-        onCheckStateChange(fishton.pickerImageList.get(position).getUri());
+        onCheckStateChange(fishton.pickerImages[position]);
     }
 
     @Override
