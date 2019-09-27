@@ -80,29 +80,26 @@ public class PickerGridAdapter
             else imagePos = position;
 
             final ViewHolderImage vh = (ViewHolderImage) holder;
-            final Uri image = fishton.pickerImages[imagePos];
+            final Uri imageUri = fishton.pickerImageList.get(imagePos).getUri();
+            final int orientation = fishton.pickerImageList.get(imagePos).getOrientation();
             final Context context = vh.item.getContext();
-            vh.item.setTag(image);
+            vh.item.setTag(imageUri);
             vh.btnThumbCount.unselect();
             vh.btnThumbCount.setCircleColor(fishton.colorActionBar);
             vh.btnThumbCount.setTextColor(fishton.colorActionBarTitle);
             vh.btnThumbCount.setStrokeColor(fishton.colorSelectCircleStroke);
 
-            final ImageData imageData = fishton.pickerImageList.get(imagePos);
-
-            initState(fishton.selectedImages.indexOf(image), vh);
-            if (image != null
-                    && vh.imgThumbImage != null) {
-                ImageAdapterData data = new ImageAdapterData(vh.imgThumbImage, imageData.getUri(), imageData.getOrientation());
+            initState(fishton.selectedImages.indexOf(imageUri), vh);
+            if (vh.imgThumbImage != null) {
+                ImageAdapterData data = new ImageAdapterData(vh.imgThumbImage, imageUri, orientation);
                 Fishton.getInstance().imageAdapter
                         .loadImage(data);
             }
 
-
             vh.btnThumbCount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onCheckStateChange(vh.item, image);
+                    onCheckStateChange(vh.item, imageUri);
                 }
             });
 
@@ -117,7 +114,7 @@ public class PickerGridAdapter
                             activity.startActivityForResult(i, new Define().ENTER_DETAIL_REQUEST_CODE);
                         }
                     } else
-                        onCheckStateChange(vh.item, image);
+                        onCheckStateChange(vh.item, imageUri);
 
                 }
             });
@@ -176,9 +173,7 @@ public class PickerGridAdapter
         } else {
             v.unselect();
         }
-
     }
-
 
     private void animScale(View view,
                            final boolean isSelected,
@@ -213,15 +208,7 @@ public class PickerGridAdapter
 
     @Override
     public int getItemCount() {
-        int count;
-        if (fishton.pickerImages == null) count = 0;
-        else count = fishton.pickerImages.length;
-
-        if (fishton.isCamera)
-            return count + 1;
-
-        if (fishton.pickerImages == null) return 0;
-        else return count;
+        return fishton.isCamera ? fishton.pickerImageList.size() + 1 : fishton.pickerImageList.size();
     }
 
     @Override
@@ -234,6 +221,7 @@ public class PickerGridAdapter
 
 
     public void addImage(Uri path) {
+        //TODO: change pickerImages to pickerImageList
         ArrayList<Uri> al = new ArrayList<>();
         Collections.addAll(al, fishton.pickerImages);
         al.add(0, path);
